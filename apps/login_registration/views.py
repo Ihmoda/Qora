@@ -28,7 +28,6 @@ def login(request):
             messages.error(request, error)
         return redirect('/')
 
-<<<<<<< HEAD
 def register(request):
     if request.session['id'] != None:
         return redirect ('/friends')
@@ -56,8 +55,3 @@ def error(request):
 def logout(request):
     request.session.clear()
     return redirect('/')
-=======
-# Create your views here.
-def index(request):
-    pass
->>>>>>> 49c8584b03faf32915a158fe5c08c423a6271b27
