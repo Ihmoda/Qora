@@ -18,7 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^$', include('apps.q_and_a.urls')),
-    url(r'^answers', include('apps.q_and_a.urls'),
+    url(r'^answers', include('apps.q_and_a.urls')),
     url(r'^profile', include('apps.profile.urls')),
     url(r'^login', include('apps.login_registration.urls')),
     url(r'^search', include('apps.search.urls')),
