@@ -10,9 +10,10 @@ def index(request):
     if not 'name' in request.session:
         request.session['name']=None
     if request.session['id'] != None:
+        # CHANGE TO CORRECT ROUTE
         return redirect ('/friends')
     else:
-        return render(request, "pythonBeltApp/index.html")
+        return render(request, "login_registration/index.html")
     
 def login(request):
     result = User.objects.valLogin(request.POST)
@@ -22,13 +23,13 @@ def login(request):
         context={
             "user": result[1]
         }
+        # CHANGE TO CORRECT ROUTE
         return redirect('/friends', context)
     else:
         for error in result[1]:
             messages.error(request, error)
         return redirect('/')
 
-<<<<<<< HEAD
 def register(request):
     if request.session['id'] != None:
         return redirect ('/friends')
@@ -36,13 +37,14 @@ def register(request):
         context={
             "max": datetime.today().strftime('%Y-%m-%d')
         }
-        return render(request, "pythonBeltApp/registration.html", context)
+        return render(request, "login_registration/registration.html", context)
 
 def process(request):
     result = User.objects.valCreate(request.POST)
     if result[0]:
         request.session['id'] = result[1].id
         request.session['name'] = result[1].username
+        # CHANGE TO CORRECT ROUTE IN SEPARATE APP
         return redirect('/friends')
     else:
         for error in result[1]:
@@ -51,13 +53,4 @@ def process(request):
 
 def error(request):
     messages.error(request, "This route does not exist")
-    return render(request, "pythonBeltApp/error.html")
-
-def logout(request):
-    request.session.clear()
-    return redirect('/')
-=======
-# Create your views here.
-def index(request):
-    pass
->>>>>>> 49c8584b03faf32915a158fe5c08c423a6271b27
+    return render(request, "login_registration/error.html")
