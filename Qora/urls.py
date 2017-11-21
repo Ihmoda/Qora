@@ -17,10 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^$', include('apps.q_and_a.urls')),
-    url(r'^answers', include('apps.q_and_a.urls')),
-    url(r'^profile', include('apps.profile.urls')),
-    url(r'^login', include('apps.login_registration.urls')),
-    url(r'^search', include('apps.search.urls')),
-    url(r'^admin/', admin.site.urls)
+    url(r'^answers', include('apps.q_and_a.urls'), namespace='q_and_a'),
+    url(r'^profile', include('apps.profile.urls'), namespace='profile'),
+    url(r'^search', include('apps.search.urls'), namespace='search'),
+    url(r'^', include('apps.login_registration.urls'), namespace='login')
 ]
