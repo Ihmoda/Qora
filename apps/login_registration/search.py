@@ -12,13 +12,13 @@ class QuestionIndex(DocType):
     class Meta:
         index = 'question-index'
 
-class BlogPostIndex(DocType):
-    author = Text()
-    posted_date = Date()
-    title = Text()
-    text = Text()
-    class Meta:
-        index = 'blogpost-index'
+# class BlogPostIndex(DocType):
+#     author = Text()
+#     posted_date = Date()
+#     title = Text()
+#     text = Text()
+#     class Meta:
+#         index = 'blogpost-index'
 
 def bulk_indexing():
     # BlogPostIndex.init()
