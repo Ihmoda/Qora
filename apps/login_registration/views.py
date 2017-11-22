@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import *
 from datetime import datetime
+from django.core.urlresolvers import reverse
 
 def index(request):
     if not 'id' in request.session:
@@ -11,7 +12,7 @@ def index(request):
         request.session['name']=None
     if request.session['id'] != None:
         # CHANGE TO CORRECT ROUTE
-        return redirect ('/friends')
+        return HttpResponseRedirect(reverse('q_and_a:home'))
     else:
         return render(request, "login_registration/index.html")
     
@@ -24,7 +25,7 @@ def login(request):
             "user": result[1]
         }
         # CHANGE TO CORRECT ROUTE
-        return redirect('/friends', context)
+        return HttpResponseRedirect(reverse('q_and_a:home', context))
     else:
         for error in result[1]:
             messages.error(request, error)
@@ -32,7 +33,8 @@ def login(request):
 
 def register(request):
     if request.session['id'] != None:
-        return redirect ('/friends')
+        # CHANGE TO CORRECT ROUTE
+        return HttpResponseRedirect(reverse('q_and_a:home'))
     else:
         context={
             "max": datetime.today().strftime('%Y-%m-%d')
@@ -45,7 +47,7 @@ def process(request):
         request.session['id'] = result[1].id
         request.session['name'] = result[1].username
         # CHANGE TO CORRECT ROUTE IN SEPARATE APP
-        return redirect('/friends')
+        return HttpResponseRedirect(reverse('q_and_a:home'))
     else:
         for error in result[1]:
             messages.error(request, error)

@@ -11,12 +11,8 @@ class UserManager(models.Manager):
         if len(numResults) > 0:
             errors.append("Unable to register: email is taken")
             return (False, errors)
-        results = User.objects.filter(username=postData['username'])
-        if len(results)>0:
-            errors.append("Unable to register: Username is taken")
-            return (False, errors)
 
-        if len(postData['fName'])<1 and len(postData['lName'])<1 and len(postData['username'])<1 and len(postData['email'])<1 and len(postData['birthdate'])<1 and len(postData['pwd'])<1:
+        if len(postData['fName'])<1 and len(postData['lName'])<1 and len(postData['email'])<1 and len(postData['pwd'])<1:
             errors.append("Please fill out the form to register")
             return (False, errors)
         if len(postData['fName'])<2:
@@ -27,21 +23,10 @@ class UserManager(models.Manager):
             errors.append("Last name is required and must be at least 2 characters")
         elif not NAME_REGEX.match(postData['lName']):
             errors.append("Invalid last name")
-        if len(postData['username'])<2:
-            errors.append("Username is required and must be at least 2 characters")
-        elif not USERNAME_REGEX.match(postData['username']):
-            errors.append("Invalid username")
         if postData['email'] == "":
             errors.append("Email is required")
         elif not EMAIL_REGEX.match(postData['email']):
             errors.append("Invalid email")
-        if postData['birthdate'] == "":
-            errors.append("Birthdate is required")
-        else:
-            bday = datetime.strptime(postData['birthdate'], '%Y-%m-%d')
-            today=datetime.today()
-            if (today-bday).days/365<18:
-                errors.append("Unable to register: User must be 18 years or older")
         if postData['pwd'] == "":
             errors.append("Password is required")
         elif not PASSWORD_REGEX.match(postData['pwd']):
@@ -52,31 +37,30 @@ class UserManager(models.Manager):
             errors.append("Password does not match password confirmation")
         if len(errors) == 0:
             hashed = bcrypt.hashpw(postData['pwd'].encode(), bcrypt.gensalt())
-            user = User.objects.create(first_name = postData['fName'], last_name = postData['lName'],username = postData['username'], email = postData['email'],birthday = bday, password = hashed)
+            user = User.objects.create(first_name = postData['fName'], last_name = postData['lName'], email = postData['email'], password = hashed)
             return (True, user)
         else:
             return (False, errors)
 
-    # IF THERE IS EXTRA TIME, ALLOW USERS TO LOGIN USING EMAIL OR USERNAME
     def valLogin(self,postData):
         errors=[]
-        if postData['username'] == "" and postData['pwd'] == "":
+        if postData['email'] == "" and postData['pwd'] == "":
             errors.append("Please fill out the form to login")
             return (False, errors)
-        if postData['username'] == "":
+        if postData['email'] == "":
             errors.append("Username is required")
         if postData['pwd'] == "":
             errors.append("Password is required")
-        if not User.objects.filter(username = postData['username']):
-            errors.append("Incorrect username")
+        if not User.objects.filter(email = postData['email']):
+            errors.append("Incorrect email")
         else:
-            password = User.objects.filter(username = postData['username'])[0].password
+            password = User.objects.filter(email = postData['email'])[0].password
             if bcrypt.hashpw(postData['pwd'].encode(), password.encode()) != password:
                 errors.append("Incorrect password")
         if len(errors)!=0:
             return (False, errors)
         else:
-            user = self.get(username = postData['username'])
+            user = self.get(email = postData['email'])
             return (True, user)
     
     def valUserRoute(self, id):
@@ -105,7 +89,7 @@ class Topic(models.Model):
 
 class Question(models.Model):
     content = models.TextField()
-    anonymity = models.BooleanField()
+    anonymity = models.BooleanField(default = False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Topic, related_name="questions")
