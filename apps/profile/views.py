@@ -9,7 +9,8 @@ def index(request):
         user = User.objects.get(id=request.session['id'])
         print user.first_name
         context={
-            'user':user
+            'user':user,
+            'questions':Question.objects.all(),
         }
         return render(request, "profile/index.html",context)
     else:
