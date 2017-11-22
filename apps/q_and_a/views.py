@@ -13,7 +13,7 @@ def index(request):
         "questions": Question.objects.all(),
         "answers": Answer.objects.all()
     }
-    
+      
     return render(request, "q_and_a/home.html", context)
 
 def add(request):
