@@ -8,5 +8,5 @@ urlpatterns = [
     url(r'^register$', views.register, name='logReg'), #display registration
     url(r'^process$', views.process), #process registration form
     url(r'^logout$', views.logout, name="logout"),
-    url(r'^', views.error),
+    # url(r'^', views.error),
 ]

@@ -40,19 +40,76 @@ def add(request):
 def newanswer(request, questionid):
     print "hit route"
     if request.method == 'POST' and 'id' in request.session:
-        print "passed check"
         errors = {}
         if len(request.POST['answer']) < 10:
-            errors['addition'] = "Your question must be at least 10 character in length"
+            errors['addition'] = "Your answer must be at least 10 character in length"
             for error in errors:
                 messages.error(request, error)
             return redirect(reverse('q_and_a:home'))
         else:
             print "passed check"
+            
             question = Question.objects.get(id=questionid)
+            print question.id
+
             user = User.objects.get(id=request.session['id'])
-            Answer.objects.create(content=request.POST['answer'], question=question, user=user)
+            answer=Answer.objects.create(content=request.POST['answer'], question=question, user=user)
+            print user.id
+            print answer.id
             return redirect(reverse('q_and_a:home'))
     return redirect(reverse('q_and_a:home'))
-            
+def question(request,question_id):
+    question=Question.objects.get(id=question_id)
+    context = {
+        "user": User.objects.get(id=request.session['id']),
+        "questions": [question],
+        "answers": Answer.objects.filter(question=question),
+        # 'QuestionComments':Question.objects.questioncomments.all(),
+    }
+      
+    return render(request, "q_and_a/question.html", context)      
 
+def comment_add(request,question_id):
+    print 'comment_add'
+    if request.method == 'POST' and 'id' in request.session:
+        errors = {}
+        print 'first if'
+        if len(request.POST['comment']) < 10:
+            print 'here1'
+            errors['addition'] = "Your comment must be at least 10 character in length"
+            for error in errors:
+                messages.error(request, error)
+            return redirect(reverse('q_and_a:home'))
+        else:
+            print 'here2'
+            user = User.objects.get(id=request.session['id'])
+            que=Question.objects.get(id=question_id)
+            comment = QuestionComment.objects.create(content=request.POST['comment'], user=user,question=que)
+            return redirect(reverse('q_and_a:home'))
+    else:
+        print 'not here'
+        return redirect(reverse('q_and_a:home'))
+
+    return redirect(reverse('login:logIndex'))
+def answer_comment_add(request,answer_id):
+    print 'comment_add'
+    if request.method == 'POST' and 'id' in request.session:
+        errors = {}
+        print 'first if'
+        if len(request.POST['comment']) < 10:
+            print 'here1'
+            errors['addition'] = "Your comment must be at least 10 character in length"
+            for error in errors:
+                messages.error(request, error)
+            return redirect(reverse('q_and_a:home'))
+        else:
+            print 'here2'
+            user = User.objects.get(id=request.session['id'])
+            ans=Answer.objects.get(id=answer_id)
+            comment = AnswerComment.objects.create(content=request.POST['comment'], user=user,answer=ans)
+            return redirect(reverse('q_and_a:home'))
+    else:
+        print 'not here'
+        return redirect(reverse('q_and_a:home'))
+
+    return redirect(reverse('login:logIndex'))
