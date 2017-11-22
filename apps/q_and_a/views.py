@@ -4,12 +4,14 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from ..login_registration.models import *
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 # Create your views here.
 def index(request):
 
     context = {
         "user": User.objects.get(id=request.session['id']),
-        "questions": Question.objects.all()
+        "questions": Question.objects.all(),
+        "answers": Answer.objects.all()
     }
     
     return render(request, "q_and_a/home.html", context)
@@ -48,7 +50,8 @@ def newanswer(request, questionid):
         else:
             print "passed check"
             question = Question.objects.get(id=questionid)
-            Answer.objects.create(content=request.POST['answer'], question=question)
+            user = User.objects.get(id=request.session['id'])
+            Answer.objects.create(content=request.POST['answer'], question=question, user=user)
             return redirect(reverse('q_and_a:home'))
     return redirect(reverse('q_and_a:home'))
             
