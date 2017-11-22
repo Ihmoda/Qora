@@ -16,10 +16,9 @@ def index(request):
         return redirect(reverse('login:logIndex'))
 def interests(request):
     if request.session['id'] != None:
-        print 'here'
         user = User.objects.get(id=request.session['id'])
-        topics=Topic.objects.all()
-        otherTopics=Topic.objects.all()
+        topics=user.interests.all()
+        otherTopics=Topic.objects.all().exclude(users=user)
         context={
             'topics':topics,
             'otherTopics':otherTopics,
@@ -29,18 +28,33 @@ def interests(request):
     else:
         return redirect(reverse('login:logIndex'))
 def interests_add(request):
+    # Topic.objects.filter(topic='asfdsaf').delete()
     if request.method == 'POST' and 'id' in request.session:
         errors = {}
         user = User.objects.get(id=request.session['id'])
         if 'newTopic' in request.POST:
-            topic = request.POST['newTopic']       
-            newTopic = Topic.objects.create(topic=topic)
-            newTopic.users.add(user)
+            if Topic.objects.filter(topic=request.POST['newTopic'] ):
+                topic = Topic.objects.get(topic=topicName)
+                topic.users.add(user)
+            else:
+                topic = request.POST['newTopic']   
+                newTopic = Topic.objects.create(topic=topic)
+                newTopic.users.add(user)
         else:
-            pass#simply add topic that was clicked on
-    return redirect(reverse('profile:interests'))
-
-    return redirect(reverse('login:logIndex'))
+            #validate topic exists
+            topicName = request.POST['topic']   
+            topic = Topic.objects.get(topic=topicName)
+            topic.users.add(user)
+    return redirect(reverse('profile:profileInterests'))
+def interests_remove(request):
+    #validation later
+    if request.method == 'POST' and 'id' in request.session:
+        errors = {}
+        user = User.objects.get(id=request.session['id'])
+        if 'topic' in request.POST:
+            topic = Topic.objects.get(topic=request.POST['topic'])
+            topic.users.remove(user)
+    return redirect(reverse('profile:profileInterests'))
 def interests_create(request, questionid):
     print "hit route"
     if request.method == 'POST' and 'id' in request.session:

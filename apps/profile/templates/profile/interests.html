@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Qora</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
+
 <body>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -17,16 +20,29 @@
             </div>
             <ul class="nav navbar-nav">
                 <!-- REMEMBER TO CHANGE CLASS ACTIVE TO THE CURRENT OPENED PAGE -->
-                <li><a href="{% url 'q_and_a:home' %}">Home</a></li>
-                <li><a href="#">Answer</a></li><!-- ADD ROUTE TO THE ANSWER PAGE -->
-                <li><button type="submit" id="addquestion" class="btn btn-danger" style="margin:8px" data-toggle="modal" data-target="#myModal">Add Question</button>
+                <li>
+                    <a href="{% url 'q_and_a:home' %}">Home</a>
+                </li>
+                <li>
+                    <a href="#">Answer</a>
+                </li>
+                <!-- ADD ROUTE TO THE ANSWER PAGE -->
+                <li>
+                    <button type="submit" id="addquestion" class="btn btn-danger" style="margin:8px" data-toggle="modal" data-target="#myModal">Add Question</button>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile<span class="caret"></span></a>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+                        <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'profile:profileIndex' %}">Profile</a></li>
-                        <li><a href="{% url 'login:logout' %}">Logout</a></li>
+                        <li>
+                            <a href="{% url 'profile:profileIndex' %}">Profile</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'login:logout' %}">Logout</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -96,7 +112,7 @@
                     <!-- BIO AND CONTENT GOES HERE -->
                     <h2>{{user.first_name}} {{user.last_name}}</h2>
                     <p>Email: {{user.email}}</p>
-                    <p>Questions asked: {# of questions asked}</p>
+                    <p>Questions asked: {{user.questions.count}}</p>
 
                 </div>
                 <div class="row">
@@ -106,11 +122,21 @@
                                 <ul class="nav ">
                                     <!-- ADD CORRECT ROUTES FOR FUNCTIONALITY -->
                                     <!-- <li class="nav-header">Sidebar</li> -->
-                                    <li class="active"><a href="#">Questions</a></li>
-                                    <li><a href="#">Answers</a></li>
-                                    <li><a href="#">Answer Later</a> </li>
-                                    <li><a href="#">Drafts</a></li>
-                                    <li><a href="{% url 'profile:profileIndex' %}">Profile</a></li>
+                                    <li class="active">
+                                        <a href="#">Questions</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Answers</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Answer Later</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Drafts</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'profile:profileIndex' %}">Profile</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -119,27 +145,45 @@
                         <!-- AUTOPOPULATE INFO BASED ON WHAT LINK IS CLICKED FROM SIDEBAR-->
                         <div class="jumbotron">
                             <h4>Your Interested Topics</h4>
-                             {%if topics%}
-                             {%for topic in topics%}
-                             <p>{{topic.topic}}</p>
-                             {%endfor%}
-                             {%endif%}
+                            {%if topics%} {%for topic in topics%}
+                            <form action="{%url 'profile:profileInterests_remove'%}" method='post'>
+                                {%csrf_token%}
+                                <input type='hidden' name='topic' value={{topic.topic}}>
+                            <button>{{topic.topic}}</button>
+                            </form>
+                            {%endfor%} {%endif%}
                         </div>
                         <div class="jumbotron">
-                            <h1>Other Intersting Topics</h1>
-                            <form action="{%url 'profile:profileInterests_add'%}">
-                            {%if otherTopics%}
-                            {%for topic in otherTopics%}
-                            {%endfor%}
-                            {%endif%}
+                            <h4>Other Interesting Topics</h4>
+
+                            {%if otherTopics%} 
+                            
+                            {%for topic in otherTopics%} 
+                            <form action="{%url 'profile:profileInterests_add'%}" method='post'>
+                                    {%csrf_token%}
+                                    <input type='hidden' name='topic' value={{topic.topic}}>
+                                <button>{{topic.topic}}</button>
+                                </form>
+                            
+                            {%endfor%} {%endif%}
                             <!-- need to limit # of topics displayed -->
+
+
+                        </div>
+                        <form action="{%url 'profile:profileInterests_add'%}" method='post'>
+                            {%csrf_token%}
                             <p>
                                 <input type='text' name='newTopic' placeholder="Type your interest">
                                 <!-- need to clean to all lowercase -->
                             </p>
-                             </form>
-                        </div>
-                        <br><br><br><br><br><br>
+                            <button>Add interest</button>
+                        </form>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -166,8 +210,9 @@
                 </div>
                 
                 sidebar-nav-fixed -->
-            </div>
         </div>
     </div>
+    </div>
 </body>
+
 </html>
