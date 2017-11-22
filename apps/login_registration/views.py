@@ -55,4 +55,12 @@ def process(request):
 
 def error(request):
     messages.error(request, "This route does not exist")
+<<<<<<< HEAD
     return render(request, "login_registration/error.html")
+=======
+    return render(request, "pythonBeltApp/error.html")
+
+def logout(request):
+    request.session.clear()
+    return redirect('/')
+>>>>>>> f406e79d4a3038d1c6c1ecbcd1283caef55c6c13
