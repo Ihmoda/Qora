@@ -2,6 +2,11 @@
 from __future__ import unicode_literals
 import re, bcrypt
 from django.db import models
+#Elastic Search Settings - Jayanth
+from .search import QuestionIndex
+from django.db.models.signals import post_save 
+from django.dispatch import receiver
+
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 NAME_REGEX = re.compile(r'^[^0-9]+$')
 PASSWORD_REGEX = re.compile(r"^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$")
@@ -97,6 +102,19 @@ class Question(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Topic, related_name="questions")
     user = models.ForeignKey(User, related_name = "questions")
+    #Added Song & Jayanth - Elastic Search Indexing
+    def indexing(self):
+            obj = QuestionIndex(
+                meta={'id': self.id}, 
+                content=self.content
+                )
+            obj.save()
+            return obj.to_dict(include_meta=True)
+# It returns a BlogPostIndex and gets saved to Elastic Search.
+@receiver(post_save, sender=Question)
+def index_post(sender, instance, **kwargs):
+    instance.indexing()
+
 
 class Follow(models.Model):
     rating = models.IntegerField()
