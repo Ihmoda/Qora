@@ -6,8 +6,7 @@
 
 ## Setup Process
 
-1. Install Elasticsearch 5.1.1
-    https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.1.tar.gz
+1. Install [Elasticsearch 5.1.1](https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.1.tar.gz)
 2. Edit /elasticsearch-5.1.1/config/elasticsearch.yml
     Add the below lines to the yml file.
     ```
