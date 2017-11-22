@@ -52,53 +52,67 @@
                         <button type="button" class="close" data-dismiss="modal">×</button>
                         <h4 class="modal-title">{{ user.first_name }} {{ user.last_name }} added</h4>
                     </div>
-                    <div class="form-group">
-                        <form action="{% url 'q_and_a:home' %}" method="post">
+
+                    <form action="{% url 'q_and_a:add' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
                             <div class="form-control">
                                 <input type="text" name="newquestion" placeholder="What is your question?">
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal">Cancel</button>
-                            </div>
-                            <form class="col-md-6">
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal">Cancel</button>
+                                </div>
                                 <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="" id="" value="checkedValue" checked> Add Anonymously
+                                    <input type="checkbox" class="form-check-input" name="anonymous" value="checkedValue"> Add Anonymously
                                 </label>
                                 <button type="submit" class="btn btn-primary">Add Question</button>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            </div>
-
-            <div class="row">
-
-                <div class="col-md-2">
-                    <p>Hello</p>
-                </div>
-
-                <div class="col-md-1">
-
-                </div>
-
-                <div class="col-md-6">
-                    <p>Hello {{ user.first_name }} {{ user.last_name }}</p>
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal">What is your question?</button>
-                </div>
-
-                <div class="col-md-1">
-                </div>
-
-                <div class="col-md-2">
-                    <p>Hello</p>
-                </div>
-
             </div>
         </div>
+
+        <div class="row">
+
+            <div class="col-md-2">
+                <p>Hello</p>
+            </div>
+
+            <div class="col-md-1">
+
+            </div>
+
+            <div class="col-md-6">
+                <p>Hello {{ user.first_name }} {{ user.last_name }}</p>
+                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal">What is your question?</button>
+                {% for question in questions %}
+                <div class="panel">
+                    <p> {{ question.content }} </p>
+                    <form action="{% url 'q_and_a:newanswer' questionid=question.id %}" method = "post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                          <label for="textarea">Answer</label>
+                          <textarea class="form-control" name="answer" rows="3" placeholder="Write your answer here"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-1">
+            </div>
+
+            <div class="col-md-2">
+                <p>Hello</p>
+            </div>
+
+        </div>
+    </div>
 
 </body>
 
