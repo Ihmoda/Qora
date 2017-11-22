@@ -88,44 +88,45 @@
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="row">
-            <div class="col-md-9">
-                <div class="content" style="border:1px solid black; width: 100%; margin: 10px 0px;">
+            <div class="col-md-12">
+                <div class="content" style="width: 100%; margin: 10px 0px; padding-left: 10px;">
                     <!-- BIO AND CONTENT GOES HERE -->
                     <h2>{user.first_name} {user.last_name}</h2>
                     <p>Email: {user.email}</p>
-                    <p>Questions asked: {questions asked}</p>
+                    <p>Questions asked: {# of questions asked}</p>
 
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="sidebar-nav-fixed affix" style="width:20%">
+                    <div class="col-md-2">
+                        <div class="sidebar-nav-fixed affix" style=" text-align:right;">
                             <div class="well">
                                 <ul class="nav ">
-                                    <li class="nav-header">Sidebar</li>
-                                    <li class="active"><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a> </li>
-                                    <li><a href="#">Link</a></li>
-                                    <li class="nav-header">Sidebar</li>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
+                                    <!-- ADD CORRECT ROUTES FOR FUNCTIONALITY -->
+                                    <!-- <li class="nav-header">Sidebar</li> -->
+                                    <li class="active"><a href="#">Questions</a></li>
+                                    <li><a href="#">Answers</a></li>
+                                    <li><a href="#">Answer Later</a> </li>
+                                    <li><a href="#">Drafts</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6" style="border:1px solid black; margin-left:10%; width:65%;">
-                        <!-- Autopopulate Info-->
+                    <div class="col-md-10" style="height: 500px; overflow: scroll;">
+                        <!-- AUTOPOPULATE INFO BASED ON WHAT LINK IS CLICKED FROM SIDEBAR-->
                         <div class="jumbotron">
-                            <h1>LOREM</h1>
+                            <h1>{{LOREM}}</h1>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex unde, consequuntur impedit, quae veniam eos quidem tenetur praesentium veritatis ea error velit? Eveniet porro ratione odit voluptas repudiandae officia impedit.</p>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex unde, consequuntur impedit, quae veniam eos quidem tenetur praesentium veritatis ea error velit? Eveniet porro ratione odit voluptas repudiandae officia impedit.</p>
                             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex unde, consequuntur impedit, quae veniam eos quidem tenetur praesentium veritatis ea error velit? Eveniet porro ratione odit voluptas repudiandae officia impedit.</p>
                         </div>
                         <br><br><br><br><br><br>
                     </div>
                 </div>
             </div>
+            <!--  
             <div class="col-md-3">
                 <div class="sidebar-nav-fixed pull-right affix" style="width:20%">
                     <div class="well">
@@ -145,9 +146,9 @@
                             <li><a href="#">Link</a></li>
                         </ul>
                     </div>
-                    <!--/.well -->
                 </div>
-                <!--/sidebar-nav-fixed -->
+                
+                sidebar-nav-fixed -->
             </div>
         </div>
     </div>
