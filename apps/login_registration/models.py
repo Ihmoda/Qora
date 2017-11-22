@@ -112,18 +112,21 @@ class Answer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     question = models.ForeignKey(Question, related_name="answers")
+    user = models.ForeignKey(User, related_name="answers", blank=True, null=True)
 
 class AnswerComment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     answer = models.ForeignKey(Answer, related_name="comments")
+    user = models.ForeignKey(User, related_name="answercomments", blank=True, null=True)
 
 class QuestionComment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     question = models.ForeignKey(Question, related_name="comments")
+    user = models.ForeignKey(User, related_name="questioncomments", blank=True, null=True)
 
 
 
