@@ -118,10 +118,28 @@
                     <div class="col-md-10" style="height: 500px; overflow: scroll;">
                         <!-- AUTOPOPULATE INFO BASED ON WHAT LINK IS CLICKED FROM SIDEBAR-->
                         <div class="jumbotron">
-                            <h1>{{LOREM}}</h1>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex unde, consequuntur impedit, quae veniam eos quidem tenetur praesentium veritatis ea error velit? Eveniet porro ratione odit voluptas repudiandae officia impedit.</p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex unde, consequuntur impedit, quae veniam eos quidem tenetur praesentium veritatis ea error velit? Eveniet porro ratione odit voluptas repudiandae officia impedit.</p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex unde, consequuntur impedit, quae veniam eos quidem tenetur praesentium veritatis ea error velit? Eveniet porro ratione odit voluptas repudiandae officia impedit.</p>
+                            <h1>QUESTIONS</h1>
+                            <table>
+                                {% for question in questions %}
+                                <h4> {{ question.content }} </h4>
+                                    {% for answer in answers %}
+                                        {% if answer.question.id == question.id %}
+                                        <h4>{{ answer.user.first_name }} {{ answer.user.last_name }}</h4>
+                                        <p>{{ answer.content }}</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                <div class="panel">
+                                    <form action="{% url 'q_and_a:newanswer' questionid=question.id %}" method = "post">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                          <label for="textarea">Answer</label>
+                                          <textarea class="form-control" name="answer" rows="3" placeholder="Write your answer here"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                                {% endfor %}
+                            </table>
                         </div>
                         <br><br><br><br><br><br>
                     </div>
