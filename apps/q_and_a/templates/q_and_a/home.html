@@ -127,17 +127,11 @@
             </div>
 
             <div class="col-md-6">
-                {{ answers }}
                 <p>Hello {{ user.first_name }} {{ user.last_name }}</p>
                 <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal">What is your question?</button>
                 {% for question in questions %}
-                <h1> {{ question.content }} </h1>
-                    {% for answer in answers %}
-                        {% if answer.question.id == question.id %}
-                        <h4>{{ answer.user.first_name }} {{ answer.user.last_name }}</h4>
-                        <p>{{ answer.content }}</p>
-                        {% endif %}
-                    {% endfor %}
+                <h1> <a href='/answers/question/{{question.id}}'>{{ question.content }}</a> </h1>
+                  <p>Answers: {{question.answers.count}}</p>
                 <div class="panel">
                     <form action="{% url 'q_and_a:newanswer' questionid=question.id %}" method = "post">
                         {% csrf_token %}

@@ -11,35 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-    <script>
-
-        $(document).ready(function () {
-
-            $(".showcomment").click(function () {
-                $(this).siblings(".commentspanel").toggle()
-            });
-
-            $(".showqcomment").click(function () {
-                $(".qcommentspanel").toggle()
-            });
-
-        });
-
-
-
-    </script>
-
-    <style>
-        .commentspanel,
-        .qcommentspanel {
-            display: none;
-        }
-    </style>
-
 </head>
-
+   
 <body>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -48,29 +21,16 @@
             </div>
             <ul class="nav navbar-nav">
                 <!-- REMEMBER TO CHANGE CLASS ACTIVE TO THE CURRENT OPENED PAGE -->
-                <li class="active">
-                    <a href="{% url 'q_and_a:home' %}">Home</a>
-                </li>
-                <li>
-                    <a href="#">Answer</a>
-                </li>
-                <!-- ADD ROUTE TO THE ANSWER PAGE -->
-                <li>
-                    <button type="submit" id="addquestion" class="btn btn-danger" style="margin:8px" data-toggle="modal" data-target="#myModal">Add Question</button>
+                <li class="active"><a href="{% url 'q_and_a:home' %}">Home</a></li>
+                <li><a href="#">Answer</a></li><!-- ADD ROUTE TO THE ANSWER PAGE -->
+                <li><button type="submit" id="addquestion" class="btn btn-danger" style="margin:8px" data-toggle="modal" data-target="#myModal">Add Question</button>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
-                        <span class="caret"></span>
-                    </a>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a href="{% url 'profile:profileIndex' %}">Profile</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'login:logout' %}">Logout</a>
-                        </li>
+                        <li><a href="{% url 'profile:profileIndex' %}">Profile</a></li>
+                        <li><a href="{% url 'login:logout' %}">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -99,6 +59,8 @@
 
                     <form action="{% url 'q_and_a:add' %}" method="post">
                         {% csrf_token %}
+                        <div class="form-group">
+                        </div>
                         <div class="modal-footer">
                             <div class="row">
                                 <div class="col-md-6">
@@ -116,98 +78,72 @@
         </div>
 
         <div class="row">
+
+            <div class="col-md-2">
+                <p>Hello</p>
+            </div>
+
             <div class="col-md-1">
 
             </div>
 
-            <div class="col-md-8">
-                <h3> {{ question.content }}</h3>
-                <div class="row">
-                    <div class="col-md-1">
-                        <form action="{% url 'q_and_a:follow' questionid=question.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link">{{ followed }}     </button>
-                        </form>
-                    </div>
-
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-link showqcomment">  Comment</button>
-
-
-                    </div>
+            <div class="col-md-6">
+                <p>Hello {{ user.first_name }} {{ user.last_name }}</p>
+                {% for question in questions %}
+                <div>
+                <h1> {{ question.content }} </h1>
+                <form action='/answers/question/{{question.id}}/comment_add', method='post'>
+                    {%csrf_token%}
+                    <input type='text' name='comment'>
+                    <button>Comment on Question</button>
+                </form>
+                <p><span></span><span></span></p>
+                {%if question.comments.all%}
+                {%for comment in question.comments.all%}
+                <h6>{{comment.content}} - {{comment.user.first_name}}</h6>
+                {%endfor%}
+                {%endif%}
                 </div>
-                <div class="panel qcommentspanel" style="background-color:rgb(215, 224, 224); padding:10px;">
-                    <form action="{% url 'q_and_a:addqcomment' questionid=question.id %}" method="post">
+                    {% for answer in answers %}
+                        {% if answer.question.id == question.id %}
+                        <h4>{{ answer.user.first_name }} {{ answer.user.last_name }}</h4>
+                        <p>{{ answer.content }}</p>
+                        {%if answer.comments.all%}
+                        {%for comment in answer.comments.all%}
+                        <h6>{{comment.content}} - {{comment.user.first_name}}</h6>
+                        {%endfor%}
+                        {%endif%}
+                        <form action='/answers/answer/{{answer.id}}/comment_add', method='post'>
+                            {%csrf_token%}
+                            <input type='text' name='comment'>
+                            <button>Comment on Answer</button>
+                        </form>
+                        {% endif %}
+                    {% endfor %}    
+                        
+                <div class="panel">
+                    <form action="{% url 'q_and_a:newanswer' questionid=question.id %}" method = "post">
                         {% csrf_token %}
                         <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="qcomment" aria-describedby="helpId" placeholder="Add a comment...">
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="submit" class="btn btn-primary">Comment</button>
-                                </div>
-                            </div>
-            
-                            {% for qcomment in questionComments %}
-                            <div class="col-md-12">
-                                <p style="font-weight:bold; color: blue;">{{qcomment.user.first_name }} {{qcomment.user.last_name}}</p>
-                                <p>{{ qcomment.content }}</p>
-                            </div>
-                            {%endfor%}
-                        
-                        </div>
-                    </form>
-                </div>
-                <div class="panel">
-                    <form action="{% url 'q_and_a:newanswer' questionid=question.id %}" method="post">
-                        {% csrf_token %}
-                        <div class="form-group" style="background-color:rgb(215, 224, 224); padding:10px;">
-                            <input type="hidden" name="source" value="questionpage">
-                            <label for="textarea">Answer</label>
-                            <textarea class="form-control" name="answer" rows="3" placeholder="Write your answer here"></textarea>
+                          <label for="textarea">Answer</label>
+                          <textarea class="form-control" name="answer" rows="3" placeholder="Write your answer here"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
-
-                {% for answer in answers %}
-                <h4 style="color:rgb(53, 53, 156);">{{answer.user.first_name }} {{answer.user.last_name}}</h4>
-                <div class="panel">                   
-                    <h4>{{ answer.content }}</h4>
-
-                    {% if answer.comments.all.0 %}
-                    <button class="showcomment btn btn-link">Show Comments</button>
-                    <div class="panel commentspanel" style="background-color:antiquewhite;">
-                        {% for answercomment in answercomments %} {% if answercomment.answer.id == answer.id %}
-                        <p>{{ answercomment.content }}</p>
-                        {% endif %} {% endfor %}
-                    </div>
-                    {% endif %}
-
-                    <form action="{% url 'q_and_a:addcomment' answerid=answer.id %}" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="comment" id="" aria-describedby="helpId" placeholder="Add a comment...">
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="submit" class="btn btn-primary">Comment</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
                 {% endfor %}
-
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-1">
+            </div>
+
+            <div class="col-md-2">
+                <p>Hello</p>
             </div>
 
         </div>
     </div>
+
 </body>
 
 </html>
