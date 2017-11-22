@@ -110,7 +110,7 @@
                                     <li><a href="#">Answers</a></li>
                                     <li><a href="#">Answer Later</a> </li>
                                     <li><a href="#">Drafts</a></li>
-                                    <li><a href="{% url 'profile:profileInterests' %}">Interests</a></li>
+                                    <li><a href="{% url 'profile:profileIndex' %}">Profile</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -118,10 +118,26 @@
                     <div class="col-md-10" style="height: 500px; overflow: scroll;">
                         <!-- AUTOPOPULATE INFO BASED ON WHAT LINK IS CLICKED FROM SIDEBAR-->
                         <div class="jumbotron">
-                            <h1>{{LOREM}}</h1>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex unde, consequuntur impedit, quae veniam eos quidem tenetur praesentium veritatis ea error velit? Eveniet porro ratione odit voluptas repudiandae officia impedit.</p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex unde, consequuntur impedit, quae veniam eos quidem tenetur praesentium veritatis ea error velit? Eveniet porro ratione odit voluptas repudiandae officia impedit.</p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex unde, consequuntur impedit, quae veniam eos quidem tenetur praesentium veritatis ea error velit? Eveniet porro ratione odit voluptas repudiandae officia impedit.</p>
+                            <h4>Your Interested Topics</h4>
+                             {%if topics%}
+                             {%for topic in topics%}
+                             <p>{{topic.topic}}</p>
+                             {%endfor%}
+                             {%endif%}
+                        </div>
+                        <div class="jumbotron">
+                            <h1>Other Intersting Topics</h1>
+                            <form action="{%url 'profile:profileInterests_add'%}">
+                            {%if otherTopics%}
+                            {%for topic in otherTopics%}
+                            {%endfor%}
+                            {%endif%}
+                            <!-- need to limit # of topics displayed -->
+                            <p>
+                                <input type='text' name='newTopic' placeholder="Type your interest">
+                                <!-- need to clean to all lowercase -->
+                            </p>
+                             </form>
                         </div>
                         <br><br><br><br><br><br>
                     </div>
