@@ -20,7 +20,7 @@ def login(request):
     result = User.objects.valLogin(request.POST)
     if result[0]:
         request.session['id'] = result[1].id
-        request.session['name'] = result[1].username
+        request.session['name'] = result[1].first_name
         context={
             "user": result[1]
         }
@@ -45,7 +45,7 @@ def process(request):
     result = User.objects.valCreate(request.POST)
     if result[0]:
         request.session['id'] = result[1].id
-        request.session['name'] = result[1].username
+        request.session['name'] = result[1].first_name
         # CHANGE TO CORRECT ROUTE IN SEPARATE APP
         return HttpResponseRedirect(reverse('q_and_a:home'))
     else:
