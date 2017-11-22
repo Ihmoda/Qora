@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 def index(request):
 
     context = {
-        user = User.objects.get(id=request.session['id']),
+        "user": User.objects.get(id=request.session['id']),
     }
     
     return render(request, "q_and_a/home.html", context)
