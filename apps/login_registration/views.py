@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import User
 from datetime import datetime
@@ -53,3 +53,7 @@ def process(request):
 def error(request):
     messages.error(request, "This route does not exist")
     return render(request, "login_registration/error.html")
+
+def logout(request):
+    request.session.clear()
+    return redirect('/')
