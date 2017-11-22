@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
-
+from ..login_registration.models import *
 # Create your views here.
 def index(request):
 
