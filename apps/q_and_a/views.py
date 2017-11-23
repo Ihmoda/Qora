@@ -8,11 +8,14 @@ from django.contrib import messages
 # Create your views here.
 def index(request):
 
-    context = {
-        "user": User.objects.get(id=request.session['id']),
-        "questions": Question.objects.all(),
-        "answers": Answer.objects.all()
-    }
+    context = {}
+
+    if 'id' in request.session:
+        context = {
+            "user": User.objects.get(id=request.session['id']),
+            "questions": Question.objects.all(),
+            "answers": Answer.objects.all()
+        }
       
     return render(request, "q_and_a/home.html", context)
 
