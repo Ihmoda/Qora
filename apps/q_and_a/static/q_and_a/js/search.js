@@ -12,10 +12,10 @@ $(document).ready(function() {
                     var hits = data.hits.hits;
                     for(var i=0;i<hits.length; i++){
                         
-                    result += '&nbsp; <a href="/answers/question/'+ hits[i]._id + '"> ' + hits[i]._source.content+'</a><br>';
+                    result += '<a class="list-group-item list-group-item-action" href="/answers/question/'+ hits[i]._id + '"> ' + hits[i]._source.content+'</a>';
                     }
                     if(result.length > 0){
-                        // result = '<ul>' + result + '</ul>'
+                        result = '<ul class="list-group">' + result + '</ul>'
                         $("#searchResult").html(result);
                     } else {
                         result = "";
